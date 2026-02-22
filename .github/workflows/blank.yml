@@ -1,4 +1,4 @@
-name: Email CI Workflow
+name: Email CI Workflow with Cache
 
 on:
   push:
@@ -7,9 +7,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache
+          key: cache-31f1bae
+
       - name: prime-cache-31f1bae
-        run: echo "Priming cache..."
+        run: echo "Cache hit? ${{ steps.cache.outputs.cache-hit }}"
 
       - name: 25ds3000027@ds.study.iitm.ac.in
-        run: echo "Hello from GitHub Actions!"
+        run: echo "Workflow with caching complete!"
